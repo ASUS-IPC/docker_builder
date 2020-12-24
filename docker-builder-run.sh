@@ -41,7 +41,7 @@ DOCKER_IMAGE="asus/pe100-yocto-builder:latest"
 docker build --build-arg userid=$(id -u) --build-arg groupid=$(id -g) --build-arg username=$(id -un) -t $DOCKER_IMAGE \
     --file $DIRECTORY_PATH_TO_DOCKER_BUILDER/Dockerfile $DIRECTORY_PATH_TO_DOCKER_BUILDER
 
-OPTIONS="--interactive --privileged --rm --tty"
+OPTIONS="--interactive --privileged --rm --tty --network host"
 OPTIONS+=" --volume $DIRECTORY_PATH_TO_SOURCE:/source --volume $HOME/pe_100_yocto/share:$HOME/pe_100_yocto/share"
 echo "Options to run docker: $OPTIONS"
 
