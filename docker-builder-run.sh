@@ -2,7 +2,7 @@
 
 set -xe
 
-mkdir -p $HOME/pe_100_yocto/share
+mkdir -p $HOME/yocto/share
 
 if [ -x "$(command -v docker)" ]; then
     echo "Docker is installed and the execute permission is granted."
@@ -37,12 +37,12 @@ else
     fi
 fi
 
-DOCKER_IMAGE="asus/pe100-yocto-builder:latest"
+DOCKER_IMAGE="asus/yocto-builder:latest"
 docker build --build-arg userid=$(id -u) --build-arg groupid=$(id -g) --build-arg username=$(id -un) -t $DOCKER_IMAGE \
     --file $DIRECTORY_PATH_TO_DOCKER_BUILDER/Dockerfile $DIRECTORY_PATH_TO_DOCKER_BUILDER
 
 OPTIONS="--interactive --privileged --rm --tty --network host"
-OPTIONS+=" --volume $DIRECTORY_PATH_TO_SOURCE:/source --volume $HOME/pe_100_yocto/share:$HOME/pe_100_yocto/share"
+OPTIONS+=" --volume $DIRECTORY_PATH_TO_SOURCE:/source --volume $HOME/yocto/share:$HOME/yocto/share"
 echo "Options to run docker: $OPTIONS"
 
 docker run $OPTIONS $DOCKER_IMAGE
