@@ -1,28 +1,22 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG userid
 ARG groupid
 ARG username
 
-# Install required packages for building Tinker Board 2 Debian
+# Install required packages for building Tinker Edge R Android
 # kmod: depmod is required by "make modules_install"
+RUN apt-get update && apt-get install -y gawk wget git diffstat unzip \
+    texinfo gcc-multilib build-essential chrpath socat cpio python python3 \
+    python3-pip python3-pexpect xz-utils debianutils iputils-ping python3-git \
+    python3-jinja2 libegl1-mesa libsdl1.2-dev pylint3 xterm rsync curl locales
 
-# Install required packages for building Debian
-RUN apt-get update
-RUN apt-get install -y repo git ssh make gcc libssl-dev liblz4-tool expect g++ patchelf chrpath gawk texinfo chrpath diffstat binfmt-support qemu-user-static live-build bison flex fakeroot cmake gcc-multilib g++-multilib unzip device-tree-compiler python-pip ncurses-dev python-pyelftools libz-dev dosfstools mtools sudo parted
+RUN apt-get update && apt-get install -y device-tree-compiler dosfstools mtools sudo parted bc kmod
 
-# kmod: depmod is required by "make modules_install"
-RUN apt-get update && apt-get install -y kmod expect patchelf
+RUN locale-gen en_US.UTF-8
 
-RUN apt-get update && apt-get install -y zip
-
-# Install additional packages for building base debian system by ubuntu-build-service from linaro
-RUN apt-get install -y binfmt-support qemu-user-static live-build
-RUN apt-get install -y bc time rsync
-RUN wget http://launchpadlibrarian.net/343927385/device-tree-compiler_1.4.5-3_amd64.deb
-RUN dpkg -i device-tree-compiler_1.4.5-3_amd64.deb
-RUN rm device-tree-compiler_1.4.5-3_amd64.deb
+ENV LANG en_US.UTF-8
 
 RUN groupadd -g $groupid $username && \
     useradd -m -u $userid -g $groupid $username && \
@@ -33,4 +27,5 @@ ENV HOME=/home/$username
 ENV USER=$username
 WORKDIR /source
 
-ENTRYPOINT chroot --skip-chdir --userspec=$(cat /root/username):$(cat /root/username) / /bin/bash -i
+ENTRYPOINT chroot --userspec=$(cat /root/username):$(cat /root/username) / /bin/bash -c "cd /source; /bin/bash -i"
+

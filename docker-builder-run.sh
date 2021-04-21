@@ -19,21 +19,10 @@ else
     exit
 fi
 
-if dpkg-query -s qemu-user-static 1>/dev/null 2>&1; then
-    echo "The package qemu-user-static is installed."
-else
-    echo "The package qemu-user-static is not installed yet and it will be installed now."
-    sudo apt-get install -y qemu-user-static
-fi
+DIRECTORY_PATH_TO_DOCKER_BUILDER="$(dirname $(readlink -f $0))"
+echo "DIRECTORY_PATH_TO_DOCKER_BUILDER: $DIRECTORY_PATH_TO_DOCKER_BUILDER"
 
-if dpkg-query -s binfmt-support 1>/dev/null 2>&1; then
-    echo "The package binfmt-support is installed."
-else
-    echo "The package binfmt-support is not installed yet and it will be installed now."
-    sudo apt-get install -y binfmt-support
-fi
-
-DIRECTORY_PATH_TO_SOURCE="$(dirname $(dirname $(readlink -f $0)))"
+DIRECTORY_PATH_TO_SOURCE="$(dirname $DIRECTORY_PATH_TO_DOCKER_BUILDER)"
 
 if [ $# -eq 0 ]; then
     echo "There is no directory path to the source provided."
@@ -49,10 +38,11 @@ fi
 DOCKER_IMAGE="asus/imx-linux-builder:latest"
 #cp ~/.gitconfig gitconfig
 docker build --build-arg userid=$(id -u) --build-arg groupid=$(id -g) --build-arg username=$(id -un) -t $DOCKER_IMAGE \
-    --file $DIRECTORY_PATH_TO_SOURCE/docker_builder/Dockerfile $DIRECTORY_PATH_TO_SOURCE/docker_builder
+    --file $DIRECTORY_PATH_TO_DOCKER_BUILDER/Dockerfile $DIRECTORY_PATH_TO_DOCKER_BUILDER
 
-OPTIONS="--privileged --rm -it --network host"
+OPTIONS="--interactive --privileged --rm --tty --network host"
 OPTIONS+=" --volume $DIRECTORY_PATH_TO_SOURCE:/source"
+OPTIONS+=" -v /usr/src:/usr/src -v /lib/modules:/lib/modules -v /linux-kernel:/linux-kernel"
 echo "Options to run docker: $OPTIONS"
 
 docker run $OPTIONS $DOCKER_IMAGE
