@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y gawk wget git diffstat unzip \
     python3-pip python3-pexpect xz-utils debianutils iputils-ping python3-git \
     python3-jinja2 libegl1-mesa libsdl1.2-dev pylint3 xterm rsync curl locales
 
-RUN apt-get update && apt-get install -y device-tree-compiler dosfstools mtools sudo parted bc kmod
+RUN apt-get update && apt-get install -y device-tree-compiler dosfstools mtools \
+    sudo parted bc kmod zip
 
 RUN locale-gen en_US.UTF-8
 
