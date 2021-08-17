@@ -14,7 +14,7 @@ RUN apt-get update && \
     xterm sed cvs subversion coreutils texi2html \
     docbook-utils python-pysqlite2 help2man make gcc g++ desktop-file-utils \
     libgl1-mesa-dev libglu1-mesa-dev mercurial autoconf automake groff curl lzop asciidoc \
-    u-boot-tools cpio sudo locales python3-pip \
+    u-boot-tools cpio sudo locales python3-pip python-yaml \
  && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
  && echo 'LANG="en_US.UTF-8"'>/etc/default/locale \
  && dpkg-reconfigure --frontend=noninteractive locales \
