@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y gawk wget git diffstat unzip \
     python3-jinja2 libegl1-mesa libsdl1.2-dev pylint3 xterm rsync curl locales
 
 RUN apt-get update && apt-get install -y device-tree-compiler dosfstools mtools \
-    sudo parted bc kmod zip
+    sudo parted bc kmod zip udev bison flex libssl-dev debootstrap qemu-user-static
 
 RUN locale-gen en_US.UTF-8
 
