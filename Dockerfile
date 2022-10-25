@@ -13,6 +13,11 @@ RUN apt-get update && apt-get install -y gawk wget git diffstat unzip \
     python3-jinja2 libegl1-mesa libsdl1.2-dev pylint3 xterm rsync curl locales \
     python-yaml
 
+#Add for yocto-4.0
+#RUN apt-get update && apt-get install -y zstd pzstd lz4c lz4 libssl-dev
+RUN apt-get install -y zstd  liblz4-tool lz4
+RUN apt-get update && apt-get install -y libssl-dev
+
 RUN locale-gen en_US.UTF-8
 
 ENV LANG en_US.UTF-8
