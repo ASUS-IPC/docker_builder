@@ -41,9 +41,19 @@ DOCKER_IMAGE="asus/yocto-4.0-builder:latest"
 docker build --build-arg userid=$(id -u) --build-arg groupid=$(id -g) --build-arg username=$(id -un) -t $DOCKER_IMAGE \
     --file $DIRECTORY_PATH_TO_DOCKER_BUILDER/Dockerfile $DIRECTORY_PATH_TO_DOCKER_BUILDER
 
-OPTIONS="--interactive --privileged --rm --tty --network host"
+if [ $VERSION ] || [ $VERSION_NUMBER ] || [ $JENKINS_COMMAND ]; then
+    OPTIONS="--privileged --rm --tty --network host -e VERSION=$VERSION -e VERSION_NUMBER=$VERSION_NUMBER"
+else
+    OPTIONS="--interactive --privileged --rm --tty --network host"
+fi
 OPTIONS+=" --volume $DIRECTORY_PATH_TO_SOURCE:/source --volume $HOME/yocto-4.0/share:$HOME/yocto-4.0/share"
 OPTIONS+=" -v /usr/src:/usr/src -v /lib/modules:/lib/modules -v /linux-kernel:/linux-kernel"
 echo "Options to run docker: $OPTIONS"
 
-docker run $OPTIONS $DOCKER_IMAGE
+COMMAND="chroot --skip-chdir --userspec=$(id -un):$(id -un) / /bin/bash"
+
+if [ $VERSION ] || [ $VERSION_NUMBER ] || [ $JENKINS_COMMAND ]; then
+    docker run $OPTIONS $DOCKER_IMAGE $COMMAND -c "$JENKINS_COMMAND"
+else
+    docker run $OPTIONS $DOCKER_IMAGE $COMMAND
+fi
