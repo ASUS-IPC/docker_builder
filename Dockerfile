@@ -25,6 +25,3 @@ RUN groupadd -g $groupid $username && \
 ENV HOME=/home/$username
 ENV USER=$username
 WORKDIR /source
-
-ENTRYPOINT chroot --userspec=$(cat /root/username):$(cat /root/username) / /bin/bash -c "cd /source; /bin/bash -i"
-
