@@ -34,5 +34,3 @@ ENV USER=$username
 WORKDIR /source
 
 RUN git config --global http.sslVerify false
-
-ENTRYPOINT chroot --userspec=$(cat /root/username):$(cat /root/username) / /bin/bash -c "cd /source; /bin/bash -i"
