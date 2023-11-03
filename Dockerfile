@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y gawk wget git=1:2.25.1-1ubuntu3 diffsta
 #RUN apt-get update && apt-get install -y zstd pzstd lz4c lz4 libssl-dev
 RUN apt-get install -y zstd  liblz4-tool lz4
 RUN apt-get update && apt-get install -y libssl-dev
+RUN apt-get install dosfstools mtools
 
 RUN locale-gen en_US.UTF-8
 
